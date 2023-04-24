@@ -14,10 +14,15 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('address');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->json('photos');
+            $table->string('creditcard_type');
+            $table->string('creditcard_number');
+            $table->string('creditcard_name');
+            $table->date('creditcard_expired');
+            $table->decimal('creditcard_cvv', $precision = 3);
             $table->timestamps();
         });
     }

@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use League\Fractal\Manager;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use League\Fractal\Resource\Collection;
 
 class User extends Authenticatable
 {
@@ -17,28 +20,20 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $table = "users";
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $guarded = [];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public static function getUsers($filter)
+    {
+        $limitPaginate = $filter['lt'] ?? 30;
+        $offset = $filter['of'] ?? 0;
+        $data = self::select('*');
+        $data->paginate($offset, ['*'], 'pagination_offset')
+            ->appends($filter);
+        $data = $data->limit($limitPaginate)
+            ->get();
+        return $data;
+
+    }
 }

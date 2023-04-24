@@ -19,5 +19,6 @@ Route::group(['middleware' => 'apiAuthCustom', 'prefix' => 'user'], function () 
     // Route::get('/test', function (Request $request) {
     //     return 'test';
     // });
-    Route::post('register', [UserController::class, 'register']);
+    Route::post('/register', [UserController::class, 'register']);
+    Route::get('/list', [UserController::class, 'getUsers']);
 });
